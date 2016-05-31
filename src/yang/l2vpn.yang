@@ -1,0 +1,83 @@
+module l2vpn {
+  namespace "http://com/example/epl";
+  prefix epl;
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+
+  import tailf-common {
+    prefix tailf;
+  }
+
+  import tailf-ncs {
+    prefix ncs;
+  }
+  augment /ncs:services {
+    list epl {
+      description "Ethernet Private Line Service";
+      key name;
+
+      uses ncs:service-data;
+      ncs:servicepoint "epl";
+
+      leaf name {
+        tailf:info "Unique service name";
+        tailf:cli-allow-range;
+        type string;
+      }
+      leaf vcid {
+        description "Virtual Circuit ID used on PE";
+        tailf:info "PW Virtual Circuit ID";
+        mandatory true;
+        type uint64;
+      }
+      leaf mtu {
+        type uint16 {
+           range "512..9192";
+        }
+       }
+
+     list pe-endpoint1 {
+     	description "Provider Edge Device - A End";
+        tailf:info "Provider Edge Device - A End";
+        key "device-name";
+        leaf device-name {
+          type leafref {
+            path "/ncs:devices/ncs:device/ncs:name";
+          }
+          }
+        leaf pe-interface {
+	    tailf:info "Local PE Device Interface";
+            type string;
+            mandatory true;
+          }
+        leaf remote-loopback {
+	  tailf:info "Remote PE Target Loopback Adress";
+          type inet:ipv4-address;
+          }               
+      }
+     list pe-endpoint2 {
+        description "Provider Edge Device - Z End";
+        tailf:info "Provider Edge Device - Z End";
+        key "device-name";
+        leaf device-name {
+          type leafref {
+            path "/ncs:devices/ncs:device/ncs:name";
+          }
+          }
+        leaf pe-interface {
+	    tailf:info "Local PE Device Interface";
+            type string;
+            mandatory true;
+          }
+        leaf remote-loopback {
+	  tailf:info "Remote PE Target Loopback Adress";
+          type inet:ipv4-address;
+          }               
+      }
+
+
+   }
+   }
+}

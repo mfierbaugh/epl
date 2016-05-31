@@ -1,0 +1,180 @@
+<config-template xmlns="http://tail-f.com/ns/config/1.0"
+                 servicepoint="epl">
+<devices xmlns="http://tail-f.com/ns/ncs">
+  <device tags="nocreate" >
+    <name>{/pe-endpoint1/device-name}</name>
+      <config>
+      <interface xmlns="urn:ios" tags="merge" annotation="Cisco"> 
+          <GigabitEthernet>
+            <name>{/pe-endpoint1/pe-interface}</name>
+            <description>NCS-EPL-SVC-{/name}</description>
+            <negotiation>
+              <auto>false</auto>
+            </negotiation>
+            <speed>1000</speed>
+            <service>
+              <instance>
+                <id>1</id>
+                <ethernet/>
+                <encapsulation>
+                  <default/>
+                </encapsulation>
+                <xconnect tags="merge">
+                  <address>{/pe-endpoint1/remote-loopback}</address>
+                  <vcid>{/vcid}</vcid>
+                  <encapsulation>mpls</encapsulation>
+                </xconnect>
+              </instance>
+            </service>
+            <keepalive>false</keepalive>
+            <ip>
+              <no-address>
+                <address>false</address>
+              </no-address>
+            </ip>
+            <load-interval>30</load-interval>
+            <mtu>{/mtu}</mtu>
+            <shutdown tags="delete"></shutdown>
+          </GigabitEthernet>
+      </interface>
+     <interface xmlns="http://tail-f.com/ned/cisco-ios-xr" tags="merge">
+        <TenGigE >
+          <id>{/pe-endpoint1/pe-interface}</id>
+          <description>NCS-EPL-SVC-{/name}</description>
+          <l2transport/>
+          <mtu>{/mtu}</mtu>
+          <shutdown tags="delete"></shutdown>
+        </TenGigE>
+      </interface>
+     <l2vpn xmlns="http://tail-f.com/ned/cisco-ios-xr" tags="merge">
+        <xconnect>
+          <group>
+            <name>NCS-EPL-SVC-{/name}</name>
+            <p2p>
+              <name>NCS-EPL-SVC-{/name}</name>
+              <interface>
+                <name>TenGigE{/pe-endpoint1/pe-interface}</name>
+              </interface>
+              <neighbor>
+                <address>{/pe-endpoint1/remote-loopback}</address>
+                <pw-id>{/vcid}</pw-id>
+              </neighbor>
+            </p2p>
+          </group>
+        </xconnect>
+      </l2vpn>
+      <configuration xmlns="http://xml.juniper.net/xnm/1.1/xnm" tags="merge">
+        <interfaces>
+          <interface>
+            <name>ge-{/pe-endpoint1/pe-interface}</name>
+	    <mtu>{/mtu}</mtu>
+            <encapsulation>ethernet-ccc</encapsulation>
+            <unit>
+              <name>0</name>
+            </unit>
+          </interface>
+        </interfaces>
+        <protocols>
+          <l2circuit>
+            <neighbor>
+              <name>{/pe-endpoint1/remote-loopback}</name>
+              <interface>
+                <name>ge-{/pe-endpoint1/pe-interface}</name>
+                <virtual-circuit-id>{/vcid}</virtual-circuit-id>
+              </interface>
+            </neighbor>
+          </l2circuit>
+        </protocols>
+      </configuration>
+      </config>
+  </device>
+
+  <device tags="nocreate" >
+   <name>{/pe-endpoint2/device-name}</name>
+      <config>
+      <interface xmlns="urn:ios" tags="merge" annotation="Cisco">
+        <GigabitEthernet>
+            <name>{/pe-endpoint2/pe-interface}</name>
+            <description>NCS-EPL-SVC-{/name}</description>
+            <negotiation>
+              <auto>false</auto>
+            </negotiation>
+            <speed>1000</speed>
+            <service>
+              <instance>
+                <id>1</id>
+                <ethernet/>
+                <encapsulation>
+                  <default/>
+                </encapsulation>
+                <xconnect tags="merge">
+                  <address>{/pe-endpoint2/remote-loopback}</address>
+                  <vcid>{/vcid}</vcid>
+                  <encapsulation>mpls</encapsulation>
+                </xconnect>
+              </instance>
+            </service>
+            <keepalive>false</keepalive>
+            <ip>
+              <no-address>
+                <address>false</address>
+              </no-address>
+            </ip>
+            <load-interval>30</load-interval>
+            <mtu>{/mtu}</mtu>
+            <shutdown tags="delete"></shutdown>
+          </GigabitEthernet>
+      </interface>
+     <interface xmlns="http://tail-f.com/ned/cisco-ios-xr" tags="merge">
+        <TenGigE>
+          <id>{/pe-endpoint2/pe-interface}</id>
+          <description>NCS-EPL-SVC-{/name}</description>
+          <l2transport/>
+          <mtu>{/mtu}</mtu>
+          <shutdown tags="delete"></shutdown>
+        </TenGigE>
+      </interface>
+     <l2vpn xmlns="http://tail-f.com/ned/cisco-ios-xr" tags="merge">
+        <xconnect>
+          <group>
+            <name>NCS-EPL-SVC-{/name}</name>
+            <p2p>
+              <name>NCS-EPL-SVC-{/name}</name>
+              <interface>
+                <name>TenGigE{/pe-endpoint2/pe-interface}</name>
+              </interface>
+              <neighbor>
+                <address>{/pe-endpoint2/remote-loopback}</address>
+                <pw-id>{/vcid}</pw-id>
+              </neighbor>
+            </p2p>
+          </group>
+        </xconnect>
+      </l2vpn>
+      <configuration xmlns="http://xml.juniper.net/xnm/1.1/xnm" tags="merge">
+        <interfaces>
+          <interface>
+            <name>ge-{/pe-endpoint2/pe-interface}</name>
+	    <mtu>{/mtu}</mtu>
+            <encapsulation>ethernet-ccc</encapsulation>
+            <unit>
+              <name>0</name>
+            </unit>
+          </interface>
+        </interfaces>
+        <protocols>
+          <l2circuit>
+            <neighbor>
+              <name>{/pe-endpoint2/remote-loopback}</name>
+              <interface>
+                <name>ge-{/pe-endpoint2/pe-interface}</name>
+                <virtual-circuit-id>{/vcid}</virtual-circuit-id>
+              </interface>
+            </neighbor>
+          </l2circuit>
+        </protocols>
+      </configuration>
+    </config>
+  </device>
+  </devices>
+</config-template>
